@@ -24,11 +24,12 @@
     </fieldset>
 </div>
 <form id="project-add" class="layui-form" action="">
+    <input id="taskID" type="hidden" name="id" value="" />
     <div class="layui-form-item">
         <div class="layui-inline">
             <label class="layui-form-label" style="width: 100px;">项目负责人</label>
             <div class="layui-input-inline">
-                <select id="principal" name="userID" lay-verify="required" lay-search="">
+                <select id="principal" name="principalID" lay-verify="required" lay-search="">
                     <option value="">项目负责人</option>
                 </select>
             </div>
@@ -38,7 +39,7 @@
         <div class="layui-inline">
             <label class="layui-form-label" style="width: 100px;">项目名称</label>
             <div class="layui-input-inline">
-                <input type="text" name="name" lay-verify="required" placeholder="请输入项目名称" autocomplete="off" class="layui-input">
+                <input id="name" type="text" name="name" lay-verify="required" placeholder="请输入项目名称" autocomplete="off" class="layui-input">
             </div>
         </div>
     </div>
@@ -46,7 +47,7 @@
         <div class="layui-inline">
             <label class="layui-form-label" style="width: 100px;">难度等级</label>
             <div class="layui-input-inline">
-                <select name="difficultyGrade" lay-verify="required" lay-search="">
+                <select id="difficultyGrade" name="difficultyGrade" lay-verify="required" lay-search="">
                     <option value="">难度指数</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -58,6 +59,19 @@
                     <option value="8">8</option>
                     <option value="9">9</option>
                     <option value="10">10</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label" style="width: 100px;">项目状态</label>
+            <div class="layui-input-inline">
+                <select id="state" name="state" lay-verify="required" lay-search="">
+                    <option value="">项目状态</option>
+                    <option value="0">失效</option>
+                    <option value="1">开启</option>
+                    <option value="2">完成</option>
                 </select>
             </div>
         </div>
@@ -93,6 +107,7 @@
             url:  remoteURL+"/user/getUserByRole.do",
             data: {roleID:8},
             dataType: "json",
+            async: false,
             success: function(data){
                 $("#principal").html("<option value=\"\">项目负责人</option>");
                 for (var i=0;i<data.length;i++) {
@@ -102,11 +117,31 @@
             }
         });
         form.render();
+
+        {
+            $.ajax({
+                type: "POST",
+                url:  remoteURL+"/project/getProjectByID.do",
+                data: {projectID:getParameter(window.location.href, "projectID")},
+                dataType: "json",
+                async: false,
+                success: function(res){
+                    console.log(res);
+                    $("#principal").val(res.data.principalID);
+                    $("#taskID").val(res.data.id);
+                    $("#name").val(res.data.name);
+                    $("#difficultyGrade").val(res.data.difficultyGrade);
+                    $("#planFinishTime").val(getDate(res.data.planFinishTime));
+                    $("#state").val(res.data.state);
+                    form.render();
+                }
+            });
+        }
         form.on('submit(demo1)', function(data){
             console.log(data.field);
             $.ajax({
                 type: "POST",
-                url:  remoteURL+"/project/addProject.do",
+                url:  remoteURL+"/project/updateProject.do",
                 contentType:"application/json;charset=utf-8",
                 data: JSON.stringify(data.field),
                 dataType: "json",
@@ -114,7 +149,7 @@
                     if(res.code==0) {
                         layer.alert(res.msg,function (data) {
                             var table = parent.layui.table;
-                            table.reload("#project-list", {
+                            table.reload("project-list", {
                                 url: remoteURL+'/project/getAllProjects.do'
                             });
                             // 获得frame索引
@@ -132,9 +167,46 @@
                     }
                 }
             });
-            // alert(JSON.stringify(all));
+            // alert(JSON.stringify(data.field));
             return false;
         });
     });
+</script>
+<script>
+    function getUserByID(url,userID) {
+        var object=null;
+        $.ajax({
+            type: "GET",
+            url:  url,
+            data: {userID:userID},
+            dataType: "json",
+            async:false,
+            success: function(res){
+                object = res;
+            }
+        });
+        return object;
+    }
+    function getDate(time) {
+        var date = new Date(time);
+        var result = "";
+        result += date.getFullYear();
+        result += "-";
+        result += getNumber(date.getMonth()+1);
+        result += "-";
+        result += getNumber(date.getDate());
+        result += " ";
+        result += getNumber(date.getHours());
+        result += ":";
+        result += getNumber(date.getMinutes());
+        result += ":";
+        result += getNumber(date.getSeconds());
+        return result;
+    }
+    function getNumber(number) {
+        if(number<10)
+            return "0"+number;
+        return number;
+    }
 </script>
 </html>

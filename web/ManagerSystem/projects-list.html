@@ -58,12 +58,29 @@
 <script>
     layui.use(['table'],function () {
         var table = layui.table;
+        var $ = layui.$;
         table.render({
             elem: '#project-list'
             ,url: remoteURL+'/project/getAllProjects.do'
             ,page:true
             ,cols: [[
                 {field:'name', title: '项目名',align:"center"}
+                , {
+                        title: '项目负责人',align:"center",templet:function (data) {
+                            var userName=null;
+                            $.ajax({
+                                type: "POST",
+                                url:  remoteURL+"/user/getSimpleUser.do",
+                                data: {userID:data.principalID},
+                                dataType: "json",
+                                async: false,
+                                success: function(res){
+                                    userName = res.userName;
+                                }
+                            });
+                            return userName;
+                        }
+                }
                 , {
                         title: '状态',align:"center",templet:function (data) {
                             return getProjectState(data.state);
@@ -84,6 +101,7 @@
                 }
                 , {
                         title: '项目进度',align:'center',templet:function (data) {
+                            console.log(data);
                         return delay(data.planFinishTime,data.finishTime);
                     }
                 }
@@ -132,24 +150,24 @@
                 });
             } else if(layEvent === 'edit'){ //编辑
                 //do something
-                // layer.open({
-                //     type:2
-                //     ,title:"修改管理员信息"
-                //     ,content:"./admin-edit.html"
-                //     ,area:['460px','480px']
-                //     // ,btn:['确定','取消']
-                //     ,success:function (layero, index) {
-                //         var body = layer.getChildFrame('body',index);
-                //         var form = layui.form;
-                //         if(data) {
-                //             body.find("#id").val(data.id);
-                //             body.find("#name").val(data.name);
-                //             body.find("#password").val();
-                //             body.find("#re_password").val();
-                //             body.find("#flag").attr("name",$("#flag").attr("name"))
-                //         }
-                //     }
-                // });
+                layer.open({
+                    type:2
+                    ,title:"修改项目信息"
+                    ,content:"./project-edit.html?projectID="+data.id
+                    ,area:['500px','600px']
+                    // ,btn:['确定','取消']
+                    ,success:function (layero, index) {
+                        var body = layer.getChildFrame('body',index);
+                        var form = layui.form;
+                        /*if(data) {
+                            body.find("#taskID").val(data.id);
+                            body.find("#principal").val(data.principalID);
+                            body.find("#name").val(data.name);
+                            body.find("#difficultyGrade").val(data.difficultyGrade);
+                            body.find("#planFinishTime").val(data.planFinishTime);
+                        }*/
+                    }
+                });
 
                 //同步更新缓存对应的值
                 obj.update({

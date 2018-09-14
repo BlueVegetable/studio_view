@@ -50,6 +50,9 @@ function delay(time,finish) {
             return "按期完成";
         nowTime = new Date(finish);
     }
+    if(time>nowTime.getTime()) {
+        return "正在进行······";
+    }
     var result = "delay:";
     if(nowTime.getFullYear()>planTime.getFullYear())
         result += (nowTime.getFullYear()-planTime.getFullYear()) + "年";

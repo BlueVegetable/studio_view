@@ -25,43 +25,52 @@
 </div>
 <form id="project-add" class="layui-form" action="">
     <div class="layui-form-item">
-        <label class="layui-form-label" style="width: 100px;">项目负责人</label>
         <div class="layui-inline">
-            <select id="principal" name="userID" lay-verify="required" lay-search="">
-                <option value="">项目负责人</option>
-            </select>
+            <label class="layui-form-label" style="width: 100px;">项目负责人</label>
+            <div class="layui-input-inline">
+                <select id="principal" name="userID" lay-verify="required" lay-search="">
+                    <option value="">项目负责人</option>
+                </select>
+            </div>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label" style="width: 100px;">项目名称</label>
         <div class="layui-inline">
-            <input type="text" name="name" lay-verify="required" placeholder="请输入项目名称" autocomplete="off" class="layui-input">
+            <label class="layui-form-label" style="width: 100px;">项目名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" lay-verify="required" placeholder="请输入项目名称" autocomplete="off" class="layui-input">
+            </div>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label" style="width: 100px;">难度等级</label>
         <div class="layui-inline">
-            <select name="difficultyGrade" lay-verify="required" lay-search="">
-                <option value="">难度指数</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-            </select>
+            <label class="layui-form-label" style="width: 100px;">难度等级</label>
+            <div class="layui-input-inline">
+                <select name="difficultyGrade" lay-verify="required" lay-search="">
+                    <option value="">难度指数</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label" style="width: 100px;">预计完成时间</label>
         <div class="layui-inline">
-            <input type="text" name="planFinishTime" lay-verify="required" class="layui-input" id="planFinishTime" placeholder="请输入项目预定完成时间">
+            <label class="layui-form-label" style="width: 100px;">预计完成时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="planFinishTime" lay-verify="required" class="layui-input" id="planFinishTime" placeholder="请输入项目预定完成时间">
+            </div>
         </div>
     </div>
+
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
